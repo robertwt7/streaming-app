@@ -5,11 +5,13 @@
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "expo:install": "expo install",
+    "run:android": "expo run:android"
   },
   "jest": {
     "preset": "jest-expo"
@@ -21,6 +23,7 @@
     "expo": "~52.0.28",
     "expo-blur": "~14.0.3",
     "expo-constants": "~17.0.5",
+    "expo-dev-client": "~5.0.10",
     "expo-font": "~13.0.3",
     "expo-haptics": "~14.0.1",
     "expo-linking": "~7.0.5",
@@ -45,10 +48,16 @@
     "@types/jest": "^29.5.12",
     "@types/react": "~18.3.12",
     "@types/react-test-renderer": "^18.3.0",
+    "eslint": "^8.57.0",
+    "eslint-config-expo": "~8.0.1",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
     "jest": "^29.2.1",
     "jest-expo": "~52.0.3",
+    "prettier": "^3.4.2",
     "react-test-renderer": "18.3.1",
     "typescript": "^5.3.3"
   },
-  "private": true
+  "private": true,
+  "packageManager": "yarn@4.6.0"
 }
