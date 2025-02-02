@@ -100,6 +100,7 @@ export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
 
   useEffect(() => {
     const _loadSoundAsync = async () => {
+      console.log("Load sound async");
       const soundObject = new Audio.Sound();
       try {
         await soundObject.loadAsync(source, {
@@ -114,16 +115,17 @@ export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
         console.error("Error loading sound", e);
       }
     };
-
     _loadSoundAsync();
+  }, [source]);
 
+  useEffect(() => {
     return sound
       ? () => {
           console.log("Unloading Sound");
           sound.unloadAsync();
         }
       : undefined;
-  }, [sound, source]);
+  }, [sound]);
 
   const _playAsync = async () => {
     sound?.playAsync();
