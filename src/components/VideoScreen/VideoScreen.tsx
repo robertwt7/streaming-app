@@ -3,13 +3,19 @@ import { useVideoPlayer, VideoView } from "expo-video";
 import { FunctionComponent } from "react";
 import { StyleSheet, View, Button } from "react-native";
 
-const videoSource = "https://localhost:3000/music/1/playlist.m3u8";
+const videoSource =
+  "http://localhost:3000/music/2/AFTER%20I%20SAY%20I'M%20SORRY%20(WHAT%20CAN%20I%20SAY)%20-%20FRANK%20BRAIDWOOD.mp3";
 
 export const VideoScreen: FunctionComponent = () => {
-  const player = useVideoPlayer(videoSource, (player) => {
-    player.loop = true;
-    player.play();
-  });
+  const player = useVideoPlayer(
+    {
+      uri: videoSource,
+    },
+    (player) => {
+      player.loop = true;
+      player.play();
+    },
+  );
 
   const { isPlaying } = useEvent(player, "playingChange", {
     isPlaying: player.playing,

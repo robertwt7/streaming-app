@@ -2087,6 +2087,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/slider@npm:4.5.5":
+  version: 4.5.5
+  resolution: "@react-native-community/slider@npm:4.5.5"
+  checksum: 10c0/78c3364c072bbc82300612a625bced682b666145dce229e7beb87f93dde5f66a955e1cca4848f662f1a9d2246f26d4717ece5d4f86cd350a295db184c024002b
+  languageName: node
+  linkType: hard
+
+"@react-native-segmented-control/segmented-control@npm:2.5.4":
+  version: 2.5.4
+  resolution: "@react-native-segmented-control/segmented-control@npm:2.5.4"
+  peerDependencies:
+    react: ">=16.0"
+    react-native: ">=0.62"
+  checksum: 10c0/a24f49bdabf80784ab141c4612c90f70699232282d66dec51cce24b4bc448700c56fdfa20c39b6902e7328d52c4bfeadd8adeb0140ffb691addbaa5c781fd716
+  languageName: node
+  linkType: hard
+
 "@react-native/assets-registry@npm:0.76.6":
   version: 0.76.6
   resolution: "@react-native/assets-registry@npm:0.76.6"
@@ -5378,7 +5395,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-asset@npm:~11.0.2":
+"expo-asset@npm:~11.0.2, expo-asset@npm:~11.0.3":
   version: 11.0.3
   resolution: "expo-asset@npm:11.0.3"
   dependencies:
@@ -5391,6 +5408,21 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/02b04861271bb49b433e9e9eb7554ca0d62d7e8281b72977836b223d592db88d585456ae09486dcce0bc9f2fab08a85fc02dbc0dbbee08b78fda9bd2e395b31c
+  languageName: node
+  linkType: hard
+
+"expo-av@npm:~15.0.2":
+  version: 15.0.2
+  resolution: "expo-av@npm:15.0.2"
+  peerDependencies:
+    expo: "*"
+    react: "*"
+    react-native: "*"
+    react-native-web: "*"
+  peerDependenciesMeta:
+    react-native-web:
+      optional: true
+  checksum: 10c0/dbb1be237a1b200eb62d53cef06f15a6ed6da272ef7d6229a36cdbf84d8990aaf87b80c3f5c53ae126d0e70c7b8a3ca01eb558bca5df1784764b7896c4cd7486
   languageName: node
   linkType: hard
 
@@ -8404,6 +8436,8 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.25.2"
     "@expo/vector-icons": "npm:^14.0.2"
+    "@react-native-community/slider": "npm:4.5.5"
+    "@react-native-segmented-control/segmented-control": "npm:2.5.4"
     "@react-navigation/bottom-tabs": "npm:^7.2.0"
     "@react-navigation/native": "npm:^7.0.14"
     "@types/jest": "npm:^29.5.12"
@@ -8414,6 +8448,8 @@ __metadata:
     eslint-config-prettier: "npm:^10.0.1"
     eslint-plugin-prettier: "npm:^5.2.3"
     expo: "npm:~52.0.28"
+    expo-asset: "npm:~11.0.3"
+    expo-av: "npm:~15.0.2"
     expo-blur: "npm:~14.0.3"
     expo-constants: "npm:~17.0.5"
     expo-dev-client: "npm:~5.0.11"
