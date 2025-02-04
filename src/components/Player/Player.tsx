@@ -230,12 +230,7 @@ export const Player: FunctionComponent<Props> = (props) => {
         })}
       </View>
 
-      <View
-        style={[
-          styles.container,
-          { flexDirection: "row", flex: 1, justifyContent: "space-between" },
-        ]}
-      >
+      <View className="flex">
         <PitchControl
           disabled={Platform.OS === "web"}
           value={props.shouldCorrectPitch}

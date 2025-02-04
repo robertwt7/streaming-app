@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AudioPlayer } from "../AudioPlayer";
 import { Audio } from "expo-av";
-import { PixelRatio, StyleSheet, View } from "react-native";
+import { PixelRatio, StyleSheet, View, Text, ScrollView } from "react-native";
 import { env } from "@/src/config/env";
 
 export const AudioScreen = () => {
@@ -13,9 +13,11 @@ export const AudioScreen = () => {
   }, []);
 
   return (
-    <View className="flex flex-1">
+    <ScrollView className="flex flex-1 p-4">
+      <Text className="text-3xl font-bold">Match Player</Text>
+
       <AudioPlayer style={styles.player} source={{ uri: musicUri }} />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -23,5 +25,6 @@ const styles = StyleSheet.create({
   player: {
     borderBottomWidth: 1.0 / PixelRatio.get(),
     borderBottomColor: "#cccccc",
+    width: "100%",
   },
 });

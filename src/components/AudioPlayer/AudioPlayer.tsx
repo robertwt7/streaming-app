@@ -1,12 +1,11 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react";
-import { StyleProp, View, ViewStyle } from "react-native";
+import { StyleProp, Text, View, ViewStyle } from "react-native";
 import {
   Audio,
   AVMetadata,
   AVPlaybackStatus,
   AVPlaybackStatusSuccess,
 } from "expo-av";
-import { env } from "@/src/config/env";
 import { Asset } from "expo-asset";
 import { Player } from "../Player";
 import { JsiAudioBar } from "../JsiAudioBar/JsiAudioBar";
@@ -64,22 +63,6 @@ export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
   });
   const prevStatus = useRef<Status | null>(null);
   const [metadata, setMetadata] = useState<AVMetadata>({});
-  async function playSound() {
-    console.log("Loading Sound");
-    const { sound } = await Audio.Sound.createAsync(
-      {
-        uri: `${env.CDN_URL}/music/1/playlist.m3u8`,
-      },
-      {
-        shouldPlay: true,
-      },
-    );
-    setSound(sound);
-
-    console.log("Playing Sound");
-    await sound.playAsync();
-  }
-
   const updateStateToStatus = (newStatus: AVPlaybackStatus) => {
     if (isAVPlaybackStatusSuccess(newStatus)) {
       console.log("onPlaybackStatusUpdate prevStatus: ", prevStatus.current);
@@ -167,7 +150,7 @@ export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
   };
 
   return (
-    <View className="flex flex-1 justify-center items-center">
+    <View className="flex flex-1">
       <Player
         {...status}
         metadata={metadata}
