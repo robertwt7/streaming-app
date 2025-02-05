@@ -150,23 +150,21 @@ export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
   };
 
   return (
-    <View className="flex flex-1">
-      <Player
-        {...status}
-        metadata={metadata}
-        style={style}
-        playAsync={_playAsync}
-        pauseAsync={_pauseAsync}
-        replayAsync={_replayAsync}
-        setPositionAsync={_setPositionAsync}
-        setIsLoopingAsync={_setIsLoopingAsync}
-        setRateAsync={_setRateAsync}
-        setIsMutedAsync={_setIsMutedAsync}
-        setVolume={_setVolumeAsync}
-        extraIndicator={
-          <JsiAudioBar isPlaying={status.isPlaying} sound={sound} />
-        }
-      />
-    </View>
+    <Player
+      {...status}
+      metadata={metadata}
+      style={style}
+      playAsync={_playAsync}
+      pauseAsync={_pauseAsync}
+      replayAsync={_replayAsync}
+      setPositionAsync={_setPositionAsync}
+      setIsLoopingAsync={_setIsLoopingAsync}
+      setRateAsync={_setRateAsync}
+      setIsMutedAsync={_setIsMutedAsync}
+      setVolume={_setVolumeAsync}
+      extraIndicator={
+        <JsiAudioBar isPlaying={status.isPlaying} sound={sound} />
+      }
+    />
   );
 };

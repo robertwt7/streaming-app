@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
 import { AudioPlayer } from "../AudioPlayer";
 import { Audio } from "expo-av";
-import { PixelRatio, StyleSheet, View, Text, ScrollView } from "react-native";
+import { verifyInstallation } from "nativewind";
+import { PixelRatio, StyleSheet, View, Text } from "react-native";
 import { env } from "@/src/config/env";
 
 export const AudioScreen = () => {
   const [musicUri, setMusicUri] = useState<string>(
     `${env.CDN_URL}/music/1/playlist.m3u8`,
   );
+
+  verifyInstallation();
   useEffect(() => {
     Audio.setIsEnabledAsync(true);
   }, []);
 
   return (
-    <ScrollView className="flex flex-1 p-4">
+    <View className="flex flex-1 p-4">
       <Text className="text-3xl font-bold">Match Player</Text>
-
-      <AudioPlayer style={styles.player} source={{ uri: musicUri }} />
-    </ScrollView>
+      <View className="flex-1 justify-center">
+        <AudioPlayer style={styles.player} source={{ uri: musicUri }} />
+      </View>
+    </View>
   );
 };
 
