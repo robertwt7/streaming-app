@@ -1,18 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 // Or from '@reduxjs/toolkit/query/react'
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { songApi } from "./services/song";
+import { coreApi } from "./services/coreApi";
 import { useDispatch, useSelector } from "react-redux";
+import { songSlice } from "./song/songSlice";
 
 export const store = configureStore({
   reducer: {
+    song: songSlice.reducer,
     // Add the generated reducer as a specific top-level slice
-    [songApi.reducerPath]: songApi.reducer,
+    [coreApi.reducerPath]: coreApi.reducer,
   },
   // Adding the api middleware enables caching, invalidation, polling,
   // and other useful features of `rtk-query`.
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(songApi.middleware),
+    getDefaultMiddleware().concat(coreApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

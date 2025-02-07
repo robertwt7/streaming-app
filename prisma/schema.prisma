@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+
+// This is temporarily added for type safe return
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Song {
+  id           Int            @id @default(autoincrement())
+  name         String
+  mbid         String?        @unique // ID in musicbrainz so metadata is easily searchable
+  length       Int? // Length in seconds
+  playlists    UserPlaylist[]
+  hlsPlaylists HlsPlaylist[]
+  artist       Artist[]
+}
+
+model Artist {
+  id    Int     @id @default(autoincrement())
+  name  String
+  mbid  String? @unique
+  songs Song[]
+}
+
+model HlsPlaylist {
+  id          Int    @id @default(autoincrement())
+  url         String
+  bitrateKbps Int
+  song        Song?  @relation(fields: [songId], references: [id])
+  songId      Int?
+}
+
+model UserPlaylist {
+  id     Int    @id @default(autoincrement())
+  name   String
+  userId Int // UserID that it belongs to (from the match backend db)
+  songs  Song[]
+}

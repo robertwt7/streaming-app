@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { AudioPlayer } from "../AudioPlayer";
 import { Audio } from "expo-av";
-import { verifyInstallation } from "nativewind";
 import { PixelRatio, StyleSheet, View, Text } from "react-native";
 import { env } from "@/src/config/env";
 
@@ -10,7 +9,6 @@ export const AudioScreen = () => {
     `${env.CDN_URL}/music/1/playlist.m3u8`,
   );
 
-  verifyInstallation();
   useEffect(() => {
     Audio.setIsEnabledAsync(true);
   }, []);

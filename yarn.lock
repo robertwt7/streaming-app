@@ -2064,6 +2064,67 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/client@npm:^6.3.1":
+  version: 6.3.1
+  resolution: "@prisma/client@npm:6.3.1"
+  peerDependencies:
+    prisma: "*"
+    typescript: ">=5.1.0"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+    typescript:
+      optional: true
+  checksum: 10c0/8d3b5fbbd60559b32b15029bf52d41cc3e643e58a8b2e6fc2075f09733900268c941f369c44271cb08b434bc5689f3317c0e5d0eb229355faf7ffbc1e9306b35
+  languageName: node
+  linkType: hard
+
+"@prisma/debug@npm:6.3.1":
+  version: 6.3.1
+  resolution: "@prisma/debug@npm:6.3.1"
+  checksum: 10c0/1b2c97499f51268928cc2c7669a2e00a8f71024eb2996b7f946b32d88227511c4a8155cabf78e324b708f7f463a9b58d051afba5ce858fdb52fa8f67b7b79333
+  languageName: node
+  linkType: hard
+
+"@prisma/engines-version@npm:6.3.0-17.acc0b9dd43eb689cbd20c9470515d719db10d0b0":
+  version: 6.3.0-17.acc0b9dd43eb689cbd20c9470515d719db10d0b0
+  resolution: "@prisma/engines-version@npm:6.3.0-17.acc0b9dd43eb689cbd20c9470515d719db10d0b0"
+  checksum: 10c0/1a326fa752f2a30e19b282a289456ff3b43f589fd29a605b10f68e7b9b1093a0f1f36c4690ecb88c67ce8436340d0b66028a7dff42f97cd587cc533f3ef8d619
+  languageName: node
+  linkType: hard
+
+"@prisma/engines@npm:6.3.1":
+  version: 6.3.1
+  resolution: "@prisma/engines@npm:6.3.1"
+  dependencies:
+    "@prisma/debug": "npm:6.3.1"
+    "@prisma/engines-version": "npm:6.3.0-17.acc0b9dd43eb689cbd20c9470515d719db10d0b0"
+    "@prisma/fetch-engine": "npm:6.3.1"
+    "@prisma/get-platform": "npm:6.3.1"
+  checksum: 10c0/32049e71b33f2f919493a85b29b528530621d0d929ddcdd2529908ff8596190bc9a55b25b9dcd1dc5c1f2a162fe3d36c9aa2cdea00fceab2a58f89e8c1ace9ec
+  languageName: node
+  linkType: hard
+
+"@prisma/fetch-engine@npm:6.3.1":
+  version: 6.3.1
+  resolution: "@prisma/fetch-engine@npm:6.3.1"
+  dependencies:
+    "@prisma/debug": "npm:6.3.1"
+    "@prisma/engines-version": "npm:6.3.0-17.acc0b9dd43eb689cbd20c9470515d719db10d0b0"
+    "@prisma/get-platform": "npm:6.3.1"
+  checksum: 10c0/6709979bf9d80d0632b4148b1637fb5b0630a4bcb217cbe414c9ffbf05b5a71f358039b6997f3ec8e009228d3504a46dccaadf35075681e087be2f5d70cf042b
+  languageName: node
+  linkType: hard
+
+"@prisma/get-platform@npm:6.3.1":
+  version: 6.3.1
+  resolution: "@prisma/get-platform@npm:6.3.1"
+  dependencies:
+    "@prisma/debug": "npm:6.3.1"
+  checksum: 10c0/e116b47736879740b60cb3bd330af2602e7bdc4183c169f2a9ec4d48f4f85aab09c8be1f1714873a25197fd095a00a9b683991b6e47230db864be2f3cef8fb94
+  languageName: node
+  linkType: hard
+
 "@radix-ui/react-compose-refs@npm:1.0.0":
   version: 1.0.0
   resolution: "@radix-ui/react-compose-refs@npm:1.0.0"
@@ -6136,7 +6197,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@npm:^2.3.2, fsevents@npm:~2.3.2":
+"fsevents@npm:2.3.3, fsevents@npm:^2.3.2, fsevents@npm:~2.3.2":
   version: 2.3.3
   resolution: "fsevents@npm:2.3.3"
   dependencies:
@@ -6146,7 +6207,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@patch:fsevents@npm%3A^2.3.2#optional!builtin<compat/fsevents>, fsevents@patch:fsevents@npm%3A~2.3.2#optional!builtin<compat/fsevents>":
+"fsevents@patch:fsevents@npm%3A2.3.3#optional!builtin<compat/fsevents>, fsevents@patch:fsevents@npm%3A^2.3.2#optional!builtin<compat/fsevents>, fsevents@patch:fsevents@npm%3A~2.3.2#optional!builtin<compat/fsevents>":
   version: 2.3.3
   resolution: "fsevents@patch:fsevents@npm%3A2.3.3#optional!builtin<compat/fsevents>::version=2.3.3&hash=df0bf1"
   dependencies:
@@ -8470,6 +8531,7 @@ __metadata:
   dependencies:
     "@babel/core": "npm:^7.25.2"
     "@expo/vector-icons": "npm:^14.0.2"
+    "@prisma/client": "npm:^6.3.1"
     "@react-native-community/slider": "npm:4.5.5"
     "@react-native-segmented-control/segmented-control": "npm:2.5.4"
     "@react-navigation/bottom-tabs": "npm:^7.2.0"
@@ -8502,6 +8564,7 @@ __metadata:
     jest-expo: "npm:~52.0.3"
     nativewind: "npm:^4.1.23"
     prettier: "npm:^3.4.2"
+    prisma: "npm:^6.3.1"
     react: "npm:18.3.1"
     react-dom: "npm:18.3.1"
     react-native: "npm:0.76.6"
@@ -9872,6 +9935,26 @@ __metadata:
     ansi-styles: "npm:^5.0.0"
     react-is: "npm:^18.0.0"
   checksum: 10c0/edc5ff89f51916f036c62ed433506b55446ff739358de77207e63e88a28ca2894caac6e73dcb68166a606e51c8087d32d400473e6a9fdd2dbe743f46c9c0276f
+  languageName: node
+  linkType: hard
+
+"prisma@npm:^6.3.1":
+  version: 6.3.1
+  resolution: "prisma@npm:6.3.1"
+  dependencies:
+    "@prisma/engines": "npm:6.3.1"
+    fsevents: "npm:2.3.3"
+  peerDependencies:
+    typescript: ">=5.1.0"
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  bin:
+    prisma: build/index.js
+  checksum: 10c0/dc09dc806f7c6aa174f83dc6e795a70f8a006a8e51f067399f599d2bcd3a6bfce9695bc2db9206b0d85fe3de568b7af62c5c4810635a36c4d79a69561e0deb46
   languageName: node
   linkType: hard
 
