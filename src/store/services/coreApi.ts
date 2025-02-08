@@ -8,7 +8,7 @@ export type Song = Prisma.SongGetPayload<{
 }>;
 // Define a service using a base URL and expected endpoints
 export const coreApi = createApi({
-  reducerPath: "pokemonApi",
+  reducerPath: "coreApi",
   baseQuery: fetchBaseQuery({ baseUrl: `${env.API_URL}/` }),
   endpoints: (builder) => ({
     getSongById: builder.query<Song, string>({

@@ -175,11 +175,11 @@ export const Player: FunctionComponent<Props> = (props) => {
         {_renderPlayPauseButton()}
         <Slider
           style={styles.slider}
-          thumbTintColor={Colors.tintColor}
+          thumbTintColor={Colors.primary}
           value={isScrubbing ? initialScrubbingMillis : props.positionMillis}
           maximumValue={props.durationMillis}
           disabled={!props.isLoaded}
-          minimumTrackTintColor={Colors.tintColor}
+          minimumTrackTintColor={Colors.primary}
           onSlidingComplete={_playFromPosition}
           onResponderGrant={() => {
             setIsScrubbing(true);
@@ -285,7 +285,7 @@ function PitchControl({
 }) {
   const height = 36;
 
-  const color = value ? Colors.tintColor : "#C1C1C1";
+  const color = value ? Colors.primary : "#C1C1C1";
   return (
     <TouchableOpacity
       disabled={disabled}
@@ -329,7 +329,7 @@ function SpeedSegmentedControl({
     <Ionicons
       name={`${name}` as "hourglass" | "speedometer"}
       size={24}
-      style={{ color: Colors.tintColor, paddingHorizontal: 8 }}
+      style={{ color: Colors.primary, paddingHorizontal: 8 }}
     />
   );
   return (
@@ -348,7 +348,7 @@ function SpeedSegmentedControl({
       <SegmentedControl
         style={{ width: "50%", minWidth: 260 }}
         values={data.map((i) => i + "x")}
-        fontStyle={{ color: Colors.tintColor }}
+        fontStyle={{ color: Colors.primary }}
         selectedIndex={index}
         tintColor="white"
         onChange={(event) => {
@@ -363,7 +363,7 @@ function SpeedSegmentedControl({
 
 function PanSlider({
   audioPan,
-  color = Colors.tintColor,
+  color = Colors.primary,
   disabled,
   onValueChanged,
 }: {
@@ -422,7 +422,7 @@ function VolumeSlider({
   volume,
   isMuted,
   disabled,
-  color = Colors.tintColor,
+  color = Colors.primary,
   onValueChanged,
   style,
 }: {
@@ -537,7 +537,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     padding: 8,
-    color: Colors.tintColor,
+    color: Colors.primary,
   },
   playPauseIcon: {
     paddingTop: 11,
@@ -571,7 +571,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 12,
-    color: Colors.tintColor,
+    color: Colors.primary,
     fontWeight: "bold",
     textAlign: "center",
     justifyContent: "center",
@@ -582,7 +582,7 @@ const styles = StyleSheet.create({
     height: 36,
   },
   activeButton: {
-    backgroundColor: Colors.tintColor,
+    backgroundColor: Colors.primary,
   },
   activeButtonText: {
     color: "white",

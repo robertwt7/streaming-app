@@ -1,7 +1,7 @@
-const tintColor = "#4630ec";
+const primary = "#415968";
 
 export const Colors = {
-  tintColor,
+  primary,
   headerBackground: "#ffffff",
   headerTitle: "#000000",
   secondaryText: "#666666",
@@ -9,7 +9,7 @@ export const Colors = {
   border: "#cccccc",
   highlightColor: "#5944ed",
   tabIconDefault: "#595959",
-  tabIconSelected: tintColor,
+  tabIconSelected: primary,
   tabBar: "#ffffff",
   errorBackground: "red",
   errorText: "#fff",

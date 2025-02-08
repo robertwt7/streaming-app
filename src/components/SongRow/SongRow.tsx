@@ -3,7 +3,10 @@ import { FunctionComponent } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Song } from "@/src/store/services/coreApi";
 import { useAppDispatch } from "@/src/store/store";
-import { setNowPlayingUrl } from "@/src/store/song/songSlice";
+import {
+  setNowPlayingMetadata,
+  setNowPlayingUrl,
+} from "@/src/store/song/songSlice";
 
 interface SongRowProps {
   className?: string;
@@ -14,13 +17,14 @@ export const SongRow: FunctionComponent<SongRowProps> = ({
   song,
 }) => {
   const dispatch = useAppDispatch();
-  const handlePress = (url: string) => {
-    dispatch(setNowPlayingUrl(url));
+  const handlePress = (song: Song) => {
+    dispatch(setNowPlayingUrl(song.hlsPlaylists[0].url));
+    dispatch(setNowPlayingMetadata(song));
   };
   return (
     <Pressable
       className={`flex flex-row p-4 items-center active:opacity-50 ${className}`}
-      onPress={() => handlePress(song.hlsPlaylists[0].url)}
+      onPress={() => handlePress(song)}
     >
       <View>
         <MaterialIcons size={20} name="music-note" color="black" />
