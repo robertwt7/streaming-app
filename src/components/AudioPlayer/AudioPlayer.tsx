@@ -1,4 +1,10 @@
-import { FunctionComponent, useEffect, useRef, useState } from "react";
+import {
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import {
   Audio,
@@ -9,11 +15,8 @@ import {
 import { Asset } from "expo-asset";
 import { Player } from "../Player";
 import { useAppDispatch } from "@/src/store/store";
-import {
-  rewindSong,
-  setSoundObject,
-  skipSong,
-} from "@/src/store/song/songSlice";
+import { rewindSong, skipSong } from "@/src/store/song/songSlice";
+import { AudioPlayerContext } from "./AudioPlayerContext";
 
 type PlaybackSource =
   | number
@@ -31,21 +34,6 @@ interface Props {
   source: PlaybackSource;
 }
 
-interface Status {
-  androidImplementation?: string;
-  isLoaded: boolean;
-  isLooping: boolean;
-  isPlaying: boolean;
-  errorMessage?: string;
-  positionMillis: number;
-  durationMillis?: number;
-  rate: number;
-  volume: number;
-  audioPan: number;
-  isMuted: boolean;
-  shouldCorrectPitch: boolean;
-}
-
 const isAVPlaybackStatusSuccess = (
   status: AVPlaybackStatus,
 ): status is AVPlaybackStatusSuccess =>
@@ -53,28 +41,17 @@ const isAVPlaybackStatusSuccess = (
 
 export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
   const dispatch = useAppDispatch();
-  const [sound, setSound] = useState<Audio.Sound | undefined>();
-  const [status, setStatus] = useState<Status>({
-    androidImplementation: "SimpleExoPlayer",
-    isMuted: false,
-    isLoaded: false,
-    isLooping: false,
-    isPlaying: false,
-    positionMillis: 0,
-    durationMillis: 0,
-    rate: 1,
-    volume: 1,
-    audioPan: 0,
-    shouldCorrectPitch: false,
-  });
-  const prevStatus = useRef<Status | null>(null);
+  const {
+    setNowPlayingSoundObject: setSound,
+    nowPlayingSoundObject: sound,
+    nowPlayingStatus: status,
+    setNowPlayingStatus: setStatus,
+  } = useContext(AudioPlayerContext);
   const [metadata, setMetadata] = useState<AVMetadata>({});
   const updateStateToStatus = (newStatus: AVPlaybackStatus) => {
     if (isAVPlaybackStatusSuccess(newStatus)) {
-      console.log("onPlaybackStatusUpdate prevStatus: ", prevStatus.current);
       console.log("onPlaybackStatusUpdate newStatus: ", newStatus);
       setStatus(newStatus);
-      prevStatus.current = newStatus;
     } else {
       setStatus({
         ...status,
@@ -105,7 +82,6 @@ export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
         updateStateToStatus(status);
         setSound(soundObject);
         soundObject?.playAsync();
-        // dispatch(setSoundObject(() => soundObject));
       } catch (e) {
         console.error("Error loading sound", e);
       }

@@ -5,13 +5,11 @@ import { Audio } from "expo-av";
 interface SongState {
   nowPlayingIndex: number | null;
   queue: Song[] | null;
-  nowPlayingSoundObject: (() => Audio.Sound) | null;
 }
 
 const initialState: SongState = {
   nowPlayingIndex: null,
   queue: null,
-  nowPlayingSoundObject: null,
 };
 
 export const songSlice = createSlice({
@@ -60,15 +58,6 @@ export const songSlice = createSlice({
         queue: action.payload,
       };
     },
-    setSoundObject: (
-      state: SongState,
-      action: PayloadAction<() => Audio.Sound>,
-    ) => {
-      return {
-        ...state,
-        nowPlayingSoundObject: action.payload,
-      };
-    },
   },
 });
 
@@ -101,13 +90,5 @@ export const nowPlayingMetadataSelector = createSelector(
 
 export const nextInQueueSelector = (state: RootState) => state.song.queue;
 
-export const nowPlayingSoundObjectSelector = (state: RootState) =>
-  state.song.nowPlayingSoundObject;
-
-export const {
-  setNowPlayingIndex,
-  setQueue,
-  skipSong,
-  rewindSong,
-  setSoundObject,
-} = songSlice.actions;
+export const { setNowPlayingIndex, setQueue, skipSong, rewindSong } =
+  songSlice.actions;

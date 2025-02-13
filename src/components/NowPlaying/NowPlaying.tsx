@@ -1,12 +1,11 @@
 import {
   nowPlayingMetadataSelector,
-  nowPlayingSoundObjectSelector,
   skipSong,
 } from "@/src/store/song/songSlice";
 import { useAppDispatch, useAppSelector } from "@/src/store/store";
 import { Colors } from "@/src/styles/Colors";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useContext } from "react";
 import { Link } from "expo-router";
 import {
   Pressable,
@@ -15,12 +14,13 @@ import {
   View,
   StyleSheet,
 } from "react-native";
+import { AudioPlayerContext } from "../AudioPlayer";
 
 export const NowPlaying: FunctionComponent = () => {
   const musicMetadata = useAppSelector(nowPlayingMetadataSelector);
-  const soundObject = useAppSelector(nowPlayingSoundObjectSelector);
-  const sound = soundObject !== null ? soundObject() : null;
   const dispatch = useAppDispatch();
+  const { nowPlayingSoundObject: sound, nowPlayingStatus } =
+    useContext(AudioPlayerContext);
   const _playAsync = async () => {
     sound?.playAsync();
   };
@@ -29,34 +29,28 @@ export const NowPlaying: FunctionComponent = () => {
     sound?.pauseAsync();
   };
 
-  //   const _renderPlayPauseButton = () => {
-  //     let onPress = _pause;
-  //     let iconName = "pause";
+  const _renderPlayPauseButton = () => {
+    let onPress = _pause;
+    let iconName = "pause";
 
-  //     if (!props.isPlaying) {
-  //       onPress = _play;
-  //       iconName = "play";
-  //     }
+    if (!nowPlayingStatus.isPlaying) {
+      onPress = _playAsync;
+      iconName = "play";
+    }
 
-  //     return (
-  //       <TouchableOpacity onPress={onPress} disabled={!props.isLoaded}>
-  //         <Ionicons
-  //           name={iconName as "pause" | "play"}
-  //           style={[styles.icon, styles.playPauseIcon]}
-  //         />
-  //       </TouchableOpacity>
-  //     );
-  //   };
+    return (
+      <TouchableOpacity onPress={onPress} disabled={!nowPlayingStatus.isLoaded}>
+        <Ionicons name={iconName as "pause" | "play"} style={[styles.icon]} />
+      </TouchableOpacity>
+    );
+  };
 
   const _renderForwardButton = () => {
     let onPress = () => dispatch(skipSong());
 
     return (
       <TouchableOpacity onPress={onPress}>
-        <Ionicons
-          name={"play-forward"}
-          style={[styles.icon, styles.playPauseIcon]}
-        />
+        <Ionicons name={"play-forward"} style={[styles.icon]} />
       </TouchableOpacity>
     );
   };
@@ -85,8 +79,8 @@ export const NowPlaying: FunctionComponent = () => {
                   )}
                 </Text>
               </View>
-              <View>
-                {/* {_renderPlayPauseButton()} */}
+              <View className="flex-row gap-4">
+                {_renderPlayPauseButton()}
                 {_renderForwardButton()}
               </View>
             </View>
@@ -100,8 +94,6 @@ export const NowPlaying: FunctionComponent = () => {
 const styles = StyleSheet.create({
   icon: {
     color: Colors.primary,
-  },
-  playPauseIcon: {
-    fontSize: 34,
+    fontSize: 24,
   },
 });
