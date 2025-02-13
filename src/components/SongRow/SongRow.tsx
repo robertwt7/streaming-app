@@ -3,31 +3,33 @@ import { FunctionComponent } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Song } from "@/src/store/services/coreApi";
 import { useAppDispatch } from "@/src/store/store";
-import {
-  setNowPlayingMetadata,
-  setNowPlayingUrl,
-} from "@/src/store/song/songSlice";
+import { setNowPlayingIndex } from "@/src/store/song/songSlice";
+import { Colors } from "@/src/styles/Colors";
 
 interface SongRowProps {
   className?: string;
   song: Song;
+  index: number;
+  onPress: () => void;
 }
 export const SongRow: FunctionComponent<SongRowProps> = ({
   className,
   song,
+  index,
+  onPress,
 }) => {
   const dispatch = useAppDispatch();
-  const handlePress = (song: Song) => {
-    dispatch(setNowPlayingUrl(song.hlsPlaylists[0].url));
-    dispatch(setNowPlayingMetadata(song));
+  const handlePress = () => {
+    dispatch(setNowPlayingIndex(index));
+    onPress();
   };
   return (
     <Pressable
       className={`flex flex-row p-4 items-center active:opacity-50 ${className}`}
-      onPress={() => handlePress(song)}
+      onPress={handlePress}
     >
       <View>
-        <MaterialIcons size={20} name="music-note" color="black" />
+        <MaterialIcons size={20} name="music-note" color={Colors.primary} />
       </View>
       <View className="flex flex-1 ml-4">
         <View className="flex flex-row justify-between items-center">
@@ -43,7 +45,7 @@ export const SongRow: FunctionComponent<SongRowProps> = ({
             </Text>
           </View>
           <View>
-            <MaterialIcons size={20} name="more-vert" color="black" />
+            <MaterialIcons size={20} name="more-vert" color={Colors.primary} />
           </View>
         </View>
       </View>

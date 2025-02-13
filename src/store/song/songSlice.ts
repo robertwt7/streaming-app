@@ -1,40 +1,113 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 import { Song } from "../services/coreApi";
-
+import { Audio } from "expo-av";
 interface SongState {
-  nowPlayingUrl: string | null;
-  nowPlayingMetadata: Partial<Song> | null;
+  nowPlayingIndex: number | null;
+  queue: Song[] | null;
+  nowPlayingSoundObject: (() => Audio.Sound) | null;
 }
 
 const initialState: SongState = {
-  nowPlayingUrl: null,
-  nowPlayingMetadata: null,
+  nowPlayingIndex: null,
+  queue: null,
+  nowPlayingSoundObject: null,
 };
 
 export const songSlice = createSlice({
   name: "song",
   initialState,
   reducers: {
-    setNowPlayingUrl: (state: SongState, action: PayloadAction<string>) => {
-      state.nowPlayingUrl = action.payload;
+    setNowPlayingIndex: (state: SongState, action: PayloadAction<number>) => {
+      state.nowPlayingIndex = action.payload;
     },
-    setNowPlayingMetadata: (
+    skipSong: (state: SongState) => {
+      if (state.nowPlayingIndex === null || state.queue === null) {
+        return state;
+      }
+      if (state.nowPlayingIndex === state.queue.length - 1) {
+        return {
+          ...state,
+          nowPlayingIndex: 0,
+        };
+      }
+
+      return {
+        ...state,
+        nowPlayingIndex: state.nowPlayingIndex + 1,
+      };
+    },
+    rewindSong: (state: SongState) => {
+      if (state.nowPlayingIndex === null || state.queue === null) {
+        return state;
+      }
+
+      if (state.nowPlayingIndex === 0) {
+        return {
+          ...state,
+          nowPlayingIndex: state.queue.length - 1,
+        };
+      }
+
+      return {
+        ...state,
+        nowPlayingIndex: state.nowPlayingIndex - 1,
+      };
+    },
+    setQueue: (state: SongState, action: PayloadAction<Song[]>) => {
+      return {
+        ...state,
+        queue: action.payload,
+      };
+    },
+    setSoundObject: (
       state: SongState,
-      action: PayloadAction<Partial<Song>>,
+      action: PayloadAction<() => Audio.Sound>,
     ) => {
       return {
         ...state,
-        nowPlayingMetadata: action.payload,
+        nowPlayingSoundObject: action.payload,
       };
     },
   },
 });
 
-export const nowPlayingSelector = (state: RootState) =>
-  state.song.nowPlayingUrl;
+export const nowPlayingIndexSelector = (state: RootState) =>
+  state.song.nowPlayingIndex;
 
-export const nowPlayingMetadataSelector = (state: RootState) =>
-  state.song.nowPlayingMetadata;
+const queueSelector = (state: RootState) => state.song.queue;
 
-export const { setNowPlayingUrl, setNowPlayingMetadata } = songSlice.actions;
+export const nowPlayingHlsSelector = createSelector(
+  nowPlayingIndexSelector,
+  queueSelector,
+  (nowPlayingHls, queue) => {
+    if (nowPlayingHls === null || queue === null) {
+      return null;
+    }
+    return queue[nowPlayingHls].hlsPlaylists[0].url;
+  },
+);
+
+export const nowPlayingMetadataSelector = createSelector(
+  nowPlayingIndexSelector,
+  queueSelector,
+  (nowPlayingIndex, queue) => {
+    if (nowPlayingIndex === null || queue === null) {
+      return null;
+    }
+    return queue[nowPlayingIndex];
+  },
+);
+
+export const nextInQueueSelector = (state: RootState) => state.song.queue;
+
+export const nowPlayingSoundObjectSelector = (state: RootState) =>
+  state.song.nowPlayingSoundObject;
+
+export const {
+  setNowPlayingIndex,
+  setQueue,
+  skipSong,
+  rewindSong,
+  setSoundObject,
+} = songSlice.actions;

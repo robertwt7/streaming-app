@@ -1,11 +1,9 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Slider from "@react-native-community/slider";
-import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { AVMetadata } from "expo-av";
 import React, { FunctionComponent } from "react";
 import {
   GestureResponderEvent,
-  Platform,
   ScrollView,
   StyleProp,
   StyleSheet,
@@ -41,6 +39,8 @@ interface Props {
   setPositionAsync: (position: number) => Promise<any>;
   setIsLoopingAsync: (isLooping: boolean) => void;
   setVolume: (volume: number, audioPan?: number) => void;
+  skipSong: () => void;
+  rewindSong: () => void;
 
   // Status
   isLoaded: boolean;
@@ -74,9 +74,6 @@ export const Player: FunctionComponent<Props> = (props) => {
 
   const _toggleLooping = () => props.setIsLoopingAsync(!props.isLooping);
 
-  const _toggleShouldCorrectPitch = () =>
-    props.setRateAsync(props.rate, !props.shouldCorrectPitch);
-
   const _seekForward = () =>
     props.setPositionAsync(props.positionMillis + 5000);
 
@@ -108,6 +105,32 @@ export const Player: FunctionComponent<Props> = (props) => {
       <TouchableOpacity onPress={onPress} disabled={!props.isLoaded}>
         <Ionicons
           name={iconName as "pause" | "play"}
+          style={[styles.icon, styles.playPauseIcon]}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const _renderForwardButton = () => {
+    let onPress = props.skipSong;
+
+    return (
+      <TouchableOpacity onPress={onPress} disabled={!props.isLoaded}>
+        <Ionicons
+          name={"play-forward"}
+          style={[styles.icon, styles.playPauseIcon]}
+        />
+      </TouchableOpacity>
+    );
+  };
+
+  const _renderBackwardButton = () => {
+    let onPress = props.rewindSong;
+
+    return (
+      <TouchableOpacity onPress={onPress} disabled={!props.isLoaded}>
+        <Ionicons
+          name={"play-back"}
           style={[styles.icon, styles.playPauseIcon]}
         />
       </TouchableOpacity>
@@ -172,7 +195,6 @@ export const Player: FunctionComponent<Props> = (props) => {
         {props.header}
       </View>
       <View style={styles.container}>
-        {_renderPlayPauseButton()}
         <Slider
           style={styles.slider}
           thumbTintColor={Colors.primary}
@@ -186,17 +208,21 @@ export const Player: FunctionComponent<Props> = (props) => {
             setInitialScrubbingMillis(props.positionMillis);
           }}
         />
-        <Text
-          style={{ width: 100, textAlign: "right" }}
-          adjustsFontSizeToFit
-          numberOfLines={1}
-        >
-          {_formatTime(props.positionMillis / 1000)} /{" "}
-          {_formatTime(props.durationMillis ?? 1 / 1000)}
-        </Text>
         {_renderReplayButton()}
       </View>
-
+      <View className="flex flex-row justify-between px-4">
+        <Text numberOfLines={1} className="text-gray-500">
+          {_formatTime(props.positionMillis / 1000)}
+        </Text>
+        <Text numberOfLines={1} className="text-gray-500">
+          {_formatTime((props.durationMillis ?? 1) / 1000)}
+        </Text>
+      </View>
+      <View className="flex flex-row justify-center gap-8 mt-4">
+        {_renderBackwardButton()}
+        {_renderPlayPauseButton()}
+        {_renderForwardButton()}
+      </View>
       <Text>{props.metadata?.title ?? ""}</Text>
 
       <View style={styles.container}>{props.extraIndicator}</View>
@@ -213,15 +239,6 @@ export const Player: FunctionComponent<Props> = (props) => {
           }}
         />
       </View>
-      <View style={styles.container}>
-        <PanSlider
-          audioPan={props.audioPan}
-          disabled={!props.isLoaded}
-          onValueChanged={(value) => {
-            props.setVolume(props.volume, value);
-          }}
-        />
-      </View>
 
       <View style={[styles.container, styles.buttonsContainer]}>
         {(props.extraButtons ?? []).map((button) => {
@@ -230,20 +247,7 @@ export const Player: FunctionComponent<Props> = (props) => {
         })}
       </View>
 
-      <View className="flex">
-        <PitchControl
-          disabled={Platform.OS === "web"}
-          value={props.shouldCorrectPitch}
-          onPress={_toggleShouldCorrectPitch}
-        />
-        <SpeedSegmentedControl
-          onValueChange={(rate) => {
-            props.setRateAsync(rate, props.shouldCorrectPitch);
-          }}
-        />
-      </View>
-
-      <View style={[styles.container, styles.buttonsContainer]}>
+      {/* <View style={[styles.container, styles.buttonsContainer]}>
         {_renderAuxiliaryButton({
           iconName: "play-skip-back",
           title: "Replay",
@@ -268,155 +272,11 @@ export const Player: FunctionComponent<Props> = (props) => {
             onPress: props.nextAsync,
             active: false,
           })}
-      </View>
+      </View> */}
       {_maybeRenderErrorOverlay()}
     </View>
   );
 };
-
-function PitchControl({
-  value,
-  disabled,
-  onPress,
-}: {
-  disabled: boolean;
-  value: boolean;
-  onPress: (value: boolean) => void;
-}) {
-  const height = 36;
-
-  const color = value ? Colors.primary : "#C1C1C1";
-  return (
-    <TouchableOpacity
-      disabled={disabled}
-      style={{
-        alignItems: "center",
-        flexDirection: "row",
-        paddingHorizontal: 4,
-        height,
-        justifyContent: "center",
-      }}
-      onPress={() => {
-        onPress(!value);
-      }}
-    >
-      <Ionicons name="stats-chart" size={24} color={color} style={{}} />
-      <Text
-        style={{
-          textDecorationLine: disabled ? "line-through" : "none",
-          textAlign: "center",
-          fontWeight: "bold",
-          color,
-          marginLeft: 8,
-          fontSize: 12,
-        }}
-      >
-        Correct Pitch
-      </Text>
-    </TouchableOpacity>
-  );
-}
-
-function SpeedSegmentedControl({
-  onValueChange,
-}: {
-  onValueChange: (value: number) => void;
-}) {
-  const data = ["0.5", "1.0", "1.5", "2.0"];
-  const [index, setIndex] = React.useState(1);
-
-  const renderIcon = (name: string) => (
-    <Ionicons
-      name={`${name}` as "hourglass" | "speedometer"}
-      size={24}
-      style={{ color: Colors.primary, paddingHorizontal: 8 }}
-    />
-  );
-  return (
-    <View
-      style={{
-        alignItems: "center",
-        justifyContent: "flex-end",
-        paddingBottom: 6,
-        margin: 10,
-        marginTop: 5,
-        flexDirection: "row",
-      }}
-    >
-      {renderIcon("hourglass")}
-
-      <SegmentedControl
-        style={{ width: "50%", minWidth: 260 }}
-        values={data.map((i) => i + "x")}
-        fontStyle={{ color: Colors.primary }}
-        selectedIndex={index}
-        tintColor="white"
-        onChange={(event) => {
-          setIndex(event.nativeEvent.selectedSegmentIndex);
-        }}
-        onValueChange={(value) => onValueChange(parseFloat(value))}
-      />
-      {renderIcon("speedometer")}
-    </View>
-  );
-}
-
-function PanSlider({
-  audioPan,
-  color = Colors.primary,
-  disabled,
-  onValueChanged,
-}: {
-  audioPan: number;
-  color?: string;
-  disabled: boolean;
-  onValueChanged: (value: number) => void;
-}) {
-  const [value, setValue] = React.useState(audioPan);
-
-  React.useEffect(() => {
-    if (value !== audioPan) {
-      onValueChanged(value);
-    }
-  }, [audioPan]);
-
-  const height = 36;
-  return (
-    <View
-      style={[
-        { flexDirection: "row", width: 100 },
-        disabled && { opacity: 0.7 },
-        { flex: 1 },
-      ]}
-      pointerEvents={disabled ? "none" : "auto"}
-    >
-      <View
-        style={{
-          alignItems: "center",
-          width: height,
-          height,
-          justifyContent: "center",
-        }}
-      >
-        <Ionicons name="barcode-outline" size={24} color={color} />
-      </View>
-      <Slider
-        value={value}
-        maximumValue={1}
-        minimumValue={-1}
-        style={{ height, flex: 1 }}
-        thumbTintColor={color}
-        minimumTrackTintColor={color}
-        onSlidingComplete={(value) => {
-          onValueChanged(value);
-        }}
-        onValueChange={(val) => {
-          setValue(val);
-        }}
-      />
-    </View>
-  );
-}
 
 function VolumeSlider({
   volume,
@@ -513,6 +373,7 @@ function VolumeSlider({
 const _formatTime = (duration: number) => {
   const paddedSecs = _leftPad(`${Math.floor(duration % 60)}`, "0", 2);
   const paddedMins = _leftPad(`${Math.floor(duration / 60)}`, "0", 2);
+
   if (duration > 3600) {
     return `${Math.floor(duration / 3600)}:${paddedMins}:${paddedSecs}`;
   }
@@ -575,10 +436,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     justifyContent: "center",
-    flex: 1,
   },
   buttonIcon: {
-    flex: 1,
     height: 36,
   },
   activeButton: {

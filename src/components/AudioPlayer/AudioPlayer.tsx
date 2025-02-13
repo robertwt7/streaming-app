@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useRef, useState } from "react";
-import { StyleProp, Text, View, ViewStyle } from "react-native";
+import { StyleProp, ViewStyle } from "react-native";
 import {
   Audio,
   AVMetadata,
@@ -8,7 +8,12 @@ import {
 } from "expo-av";
 import { Asset } from "expo-asset";
 import { Player } from "../Player";
-import { JsiAudioBar } from "../JsiAudioBar/JsiAudioBar";
+import { useAppDispatch } from "@/src/store/store";
+import {
+  rewindSong,
+  setSoundObject,
+  skipSong,
+} from "@/src/store/song/songSlice";
 
 type PlaybackSource =
   | number
@@ -47,6 +52,7 @@ const isAVPlaybackStatusSuccess = (
   Boolean((status as AVPlaybackStatusSuccess).uri);
 
 export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
+  const dispatch = useAppDispatch();
   const [sound, setSound] = useState<Audio.Sound | undefined>();
   const [status, setStatus] = useState<Status>({
     androidImplementation: "SimpleExoPlayer",
@@ -83,6 +89,10 @@ export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
 
   useEffect(() => {
     const _loadSoundAsync = async () => {
+      if (sound) {
+        console.log("Unloading Sound");
+        await sound.unloadAsync();
+      }
       console.log("Load sound async");
       const soundObject = new Audio.Sound();
       try {
@@ -94,6 +104,8 @@ export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
         const status = await soundObject.getStatusAsync();
         updateStateToStatus(status);
         setSound(soundObject);
+        soundObject?.playAsync();
+        // dispatch(setSoundObject(() => soundObject));
       } catch (e) {
         console.error("Error loading sound", e);
       }
@@ -101,15 +113,26 @@ export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
     _loadSoundAsync();
   }, [source]);
 
-  useEffect(() => {
-    return sound
-      ? () => {
-          console.log("Unloading Sound");
-          sound.unloadAsync();
-        }
-      : undefined;
-  }, [sound]);
+  /**
+   * TODO: do we need to clean this up? cleaning this up is causing the player screen to not load the audio automatically
+   * The problem is because when we switch to other tab, then this component is unmounted, and the sound is unloaded
+   */
+  // useEffect(() => {
+  //   return sound
+  //     ? () => {
+  //         console.log("Unloading Sound");
+  //         sound.unloadAsync();
+  //       }
+  //     : undefined;
+  // }, [sound]);
 
+  const _skipSong = () => {
+    dispatch(skipSong());
+  };
+
+  const _rewindSong = () => {
+    dispatch(rewindSong());
+  };
   const _playAsync = async () => {
     sound?.playAsync();
   };
@@ -162,9 +185,8 @@ export const AudioPlayer: FunctionComponent<Props> = ({ style, source }) => {
       setRateAsync={_setRateAsync}
       setIsMutedAsync={_setIsMutedAsync}
       setVolume={_setVolumeAsync}
-      extraIndicator={
-        <JsiAudioBar isPlaying={status.isPlaying} sound={sound} />
-      }
+      skipSong={_skipSong}
+      rewindSong={_rewindSong}
     />
   );
 };
